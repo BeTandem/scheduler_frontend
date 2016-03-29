@@ -4,10 +4,10 @@ angular.module 'tandemApp'
 
 .controller 'MeetingController',
 ($scope, $location, Meeting, Attendee, Email, inform, SweetAlert, $analytics) ->
+  $scope.formSubmitted = false
   $scope.meeting = {}
   $scope.meeting.attendees = []
   $scope.meeting.details = {}
-  $scope.meeting.details.duration = 60
   $scope.meeting.schedule = [
       day_code: 'm',
       morning: true,
@@ -114,6 +114,7 @@ angular.module 'tandemApp'
       inform.add("Unable to update meeting length", {type: "danger"})
 
   $scope.submitMeeting = ->
+    $scope.formSubmitted = true
     validateMeetingForm = (meeting) ->
       validDetails = true
       for detail of meeting.details
@@ -135,7 +136,6 @@ angular.module 'tandemApp'
       details =
         what: document.getElementById("what").value
         location: document.getElementById("location").value
-        duration: document.getElementById("duration").value
       $scope.meeting.details = details
 
     getTimeSelection = ->

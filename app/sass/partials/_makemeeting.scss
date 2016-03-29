@@ -29,8 +29,20 @@ body {
     width: 100%;
   }
 
-  .details .form-group:not(:last-child) {
-    padding-right: 15px;
+  .details {
+    .form-group:not(:last-child) {
+      padding-right: 15px;
+    }
+
+    .form-control.ng-touched {
+      &.ng-invalid,&.ng-empty {
+        border-color: $brand-danger;
+      }
+    }
+  }
+
+  &.form-submitted .details .form-control.ng-empty {
+    border-color: $brand-danger;
   }
 
   .attendees form button {
@@ -43,6 +55,10 @@ body {
     margin-top: $padding-large-vertical;
     background-color: $gray-lighter;
     border-radius: $border-radius-small;
+
+    &--invalid {
+      border: 1px solid $brand-danger;
+    }
 
     > div:not(:last-child) {
       padding-bottom: $padding-base-vertical;
@@ -83,6 +99,10 @@ body {
     margin-left: 15px;
     margin-top: $padding-large-vertical;
     margin-bottom: $padding-large-vertical;
+
+    &--invalid {
+      border: 1px solid $brand-danger;
+    }
 
     > div:not(:last-child) {
       margin-bottom: $padding-base-vertical;
