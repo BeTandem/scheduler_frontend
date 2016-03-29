@@ -8,6 +8,7 @@ angular.module 'tandemApp'
   $scope.meeting.attendees = []
   $scope.meeting.details = {}
   $scope.meeting.details.duration = 60
+  $scope.meeting.calendar_hours = {}
   $scope.meeting.schedule = [
       day_code: 'm',
       morning: true,
@@ -38,6 +39,11 @@ angular.module 'tandemApp'
   Meeting.addMeeting().$promise.then (res) ->
     $scope.meeting.id = res.meeting_id
     $scope.meeting.schedule = res.schedule
+
+    for key, time of res.calendar_hours
+      if time > 12
+        time = time - 12
+      $scope.meeting.calendar_hours[key] = time
 
   $scope.allAttendeesRegistered = ->
     for attendee in $scope.meeting.attendees
