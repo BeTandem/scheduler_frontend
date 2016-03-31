@@ -24,7 +24,7 @@ div.meeting
 
     div.col-lg-8.attendee-list
       div(ng-if="!meeting.attendees.length")
-        span Enter your attendee's emails and we'll fill the calendar below with their availability.
+        span Add emails above and we'll update the calendar below to reflect everyone's schedule.
       div(ng-repeat="attendee in meeting.attendees")
         div(ng-if="attendee.isTandemUser").attendee-list__attendee.attendee-list__attendee--registered
           span {{attendee.name}}
@@ -41,7 +41,7 @@ div.meeting
   div.col-lg-12.when
     h2 When is it
     div.instructions-box.col-lg-10
-      div: span Choose a time block, and we'll automatically find the best time within it for everyone to meet.
+      div: span Choose a block of time below and we will automatically find the best meeting time within it that works for everyone.
       div(ng-if="!allAttendeesRegistered()").instruction--warning
         i.icon.icon-exclamation-triangle
         span Not all attendees are Tandem users. This calendar doesn't reflect their availability.
