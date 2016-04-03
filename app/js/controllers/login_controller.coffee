@@ -15,7 +15,8 @@ angular.module 'tandemApp'
     $auth.authenticate(provider)
     .then (response)->
       # Auth automatically stored in localStorage vi $auth
-      $location.path "/"
-    .catch (response)->
+      $location.path "/create-meeting"
+    .catch (error)->
       # Handle error
-      console.log(response)
+      alert(error)
+      console.log(error)
