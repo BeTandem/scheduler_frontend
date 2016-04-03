@@ -23,8 +23,9 @@ div.meeting(ng-class="formSubmitted ? 'form-submitted' : ''")
           i.icon.icon-plus.icon--primary.success
 
     div.col-lg-6.attendee-list(ng-class="!meeting.attendees.length && formSubmitted ? 'attendee-list--invalid' : ''")
+
       div(ng-if="!meeting.attendees.length")
-        span Enter attendee emails above and we'll grab their availability
+        span Add emails above and we'll update the calendar below to reflect everyone's schedule.
       div(ng-repeat="attendee in meeting.attendees")
         div(ng-if="attendee.isTandemUser").attendee-list__attendee.attendee-list__attendee--registered
           span {{attendee.name}}
@@ -41,10 +42,10 @@ div.meeting(ng-class="formSubmitted ? 'form-submitted' : ''")
   div.col-lg-12.when
     h2 When is it
     div.instructions-box.col-lg-10(ng-class="meeting.timeSelections.length == 0 ? 'instructions-box--invalid' : ''")
-      div: span There are some {{meeting.details.duration}} minute blocks of time that work for everyone to meet. Choose one and Tandem will do the rest
+      div: span Choose a block of time below and we will automatically find the best meeting time within it that works for everyone.
       div(ng-if="!allAttendeesRegistered()").instruction--warning
         i.icon.icon-exclamation-triangle
-        span Not all attendees are Tandem users. This calendar doesn't reflect their availability
+        span Not all attendees are Tandem users. This calendar doesn't reflect their availability.
     div.calendar.col-lg-12
       div.day(id="{{day.day_code}}" ng-repeat="day in meeting.schedule")
         span {{day.day_code}}
@@ -58,12 +59,12 @@ div.meeting(ng-class="formSubmitted ? 'form-submitted' : ''")
       div.chunks
         div
           span Morning
-          span 8-12
+          span {{meeting.calendar_hours.morning_start}}-{{meeting.calendar_hours.morning_end}}
         div
           span Afternoon
-          span 12-5
+          span {{meeting.calendar_hours.afternoon_start}}-{{meeting.calendar_hours.afternoon_end}}
         div
           span Evening
-          span 5-8
+          span {{meeting.calendar_hours.evening_start}}-{{meeting.calendar_hours.evening_end}}
   div#submit.col-lg-2.col-lg-offset-10
     button.btn.btn-lg.btn-primary(ng-click="submitMeeting()" analytics-on="click" analytics-event="Schedule Meeting") Schedule it

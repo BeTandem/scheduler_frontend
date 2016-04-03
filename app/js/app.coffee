@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'tandemApp', [
-  'ngRoute'
+  'ui.router'
   'ngResource'
   'ngAnimate'
   'ui.bootstrap'
@@ -15,22 +15,49 @@ angular.module 'tandemApp', [
   'angulartics.mixpanel'
 ]
 
-.config ($routeProvider) ->
-  $routeProvider
-    .when "/",
-      templateUrl: "./views/make-meeting.html",
-      controller: "MeetingController"
-    .when "/success",
-      templateUrl: "./views/success.html",
-      controller: ""
-    .when "/login",
+.config ($stateProvider, $urlRouterProvider) ->
+  skipIfLoggedIn = ($q, $auth, $location) ->
+    deferred = $q.defer()
+    if ($auth.isAuthenticated())
+      $location.path('/create-meeting')
+    else
+      deferred.resolve()
+    return deferred.promise
+
+  loginRequired = ($q, $auth, $location) ->
+    deferred = $q.defer()
+    if ($auth.isAuthenticated())
+      deferred.resolve()
+    else
+      $location.path('/login')
+    return deferred.promise
+
+  $stateProvider
+    .state "home",
+      url: "/"
       templateUrl: "./views/login.html",
       controller: "LoginController"
-    .when "/logout",
+      resolve:
+        skipIfLoggedIn: skipIfLoggedIn
+    .state "meeting",
+      url: '/create-meeting'
+      templateUrl: "./views/make-meeting.html",
+      controller: "MeetingController"
+      resolve:
+        loginRequired: loginRequired
+    .state "success",
+      url: "/success"
+      templateUrl: "./views/success.html",
+      controller: ""
+      resolve:
+        loginRequired: loginRequired
+    .state "logout",
+      url: "/logout"
       template: "",
       controller: "LogoutController"
-    .otherwise
-      redirectTo: '/'
+
+  $urlRouterProvider.otherwise '/'
+
 
 .config ($locationProvider) ->
   # Enable pretty urls (without '/#')
@@ -56,7 +83,4 @@ angular.module 'tandemApp', [
     ]
     clientId: googleConfig.clientId
 
-.run ($auth, $location) ->
-  # Punt from pageload if no auth present
-  if !$auth.isAuthenticated()
-    $location.url('/login')
+
