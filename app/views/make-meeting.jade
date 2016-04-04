@@ -1,4 +1,4 @@
-div.meeting
+div.meeting(ng-class="formSubmitted ? 'form-submitted' : ''")
   div.col-lg-12.details
     h2 The details
     form.col-lg-8
@@ -9,10 +9,10 @@ div.meeting
           input#location.form-control(ng-model="meeting.details.location" placeholder="Where" analytics-on="focusout")
         div.form-group
           select#duration.form-control(ng-model="meeting.details.duration" required ng-change="setMeetingLength(meeting.details.duration)" analytics-on="change")
-             option(value="" disabled selected hidden) How long
-             option(value="15") 15 minutes
-             option(value="30") 30 minutes
-             option(value="60") 60 minutes
+            option(value="" disabled selected hidden) How long
+            option(value="15") 15 minutes
+            option(value="30") 30 minutes
+            option(value="60") 60 minutes
   div.col-lg-12.attendees
     h2 Who's coming
     form.form-inline
@@ -22,7 +22,8 @@ div.meeting
         button.icon(ng-click="addAttendee()" type="submit" analytics-on="click" analytics-event="Add Attendee")
           i.icon.icon-plus.icon--primary.success
 
-    div.col-lg-8.attendee-list
+    div.col-lg-6.attendee-list(ng-class="!meeting.attendees.length && formSubmitted ? 'attendee-list--invalid' : ''")
+
       div(ng-if="!meeting.attendees.length")
         span Add emails above and we'll update the calendar below to reflect everyone's schedule.
       div(ng-repeat="attendee in meeting.attendees")
@@ -40,7 +41,7 @@ div.meeting
 
   div.col-lg-12.when
     h2 When is it
-    div.instructions-box.col-lg-10
+    div.instructions-box.col-lg-10(ng-class="meeting.timeSelections.length == 0 ? 'instructions-box--invalid' : ''")
       div: span Choose a block of time below and we will automatically find the best meeting time within it that works for everyone.
       div(ng-if="!allAttendeesRegistered()").instruction--warning
         i.icon.icon-exclamation-triangle
