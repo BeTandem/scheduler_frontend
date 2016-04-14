@@ -37,14 +37,17 @@ angular.module 'tandemApp'
       evening: true
   ]
 
-  Meeting.addMeeting().$promise.then (res) ->
+  Meeting.meeting.create().$promise.then (res) ->
     $scope.meeting.id = res.meeting_id
     $scope.meeting.schedule = res.schedule
-
     for key, time of res.calendar_hours
       if time > 12
         time = time - 12
       $scope.meeting.calendar_hours[key] = time
+  .catch (err) ->
+    console.error err
+    $analytics.eventTrack('Failed Create Meeting')
+    inform.add("Unable to create meeting", {type: "danger"})
 
   $scope.allAttendeesRegistered = ->
     for attendee in $scope.meeting.attendees
@@ -57,11 +60,11 @@ angular.module 'tandemApp'
       elem.email == $scope.newEmail
 
     if $scope.newEmail and not duplicate
-      email =
-        meeting_id: $scope.meeting.id,
+      emailToAdd =
         email: $scope.newEmail
 
-      Attendee.addAttendee(email).$promise.then (res) ->
+      Meeting.attendee.add({id:$scope.meeting.id}, emailToAdd)
+      .$promise.then (res) ->
         $analytics.eventTrack('Successfully Added Attendee')
         isTandemUser = false
         name = ''
@@ -79,7 +82,8 @@ angular.module 'tandemApp'
         $scope.meeting.schedule = res.schedule
 
         $scope.newEmail = ''
-      .catch ->
+      .catch (err) ->
+        console.error err
         $analytics.eventTrack('Failed Add Attendee')
         inform.add("Unable to add email address", {type: "danger"})
 
@@ -96,16 +100,16 @@ angular.module 'tandemApp'
     }, (confirm)->
       if confirm
         $analytics.eventTrack('Confirm Delete Attendee')
-        delObject =
-          meeting_id: $scope.meeting.id
+        emailToDelete =
           email: $scope.meeting.attendees[index].email
 
-        Attendee.deleteAttendee(delObject).$promise.then (res) ->
+        Meeting.attendee.remove({id: $scope.meeting.id}, emailToDelete)
+        .$promise.then (res) ->
           $scope.meeting.attendees.splice(index, 1)
           $scope.meeting.schedule = res.schedule
 
-        .catch ->
-          console.log 'err'
+        .catch (err) ->
+          console.error err
           $analytics.eventTrack('Error deleting Attendee')
           inform.add("Unable to remove email address", {type: "danger"})
       else
@@ -113,10 +117,10 @@ angular.module 'tandemApp'
 
   $scope.setMeetingLength = (length_in_min) ->
     $scope.meeting.length_in_min = length_in_min
-    Meeting.updateMeeting($scope.meeting).$promise.then (res)->
+    Meeting.meeting.update($scope.meeting).$promise.then (res)->
       $scope.meeting.schedule = res.schedule
-      console.log 'Meeting Length Updated!'
-    .catch ->
+    .catch (err) ->
+      console.error err
       $analytics.eventTrack('Error Updating Meeting Length')
       inform.add("Unable to update meeting length", {type: "danger"})
 
@@ -159,18 +163,19 @@ angular.module 'tandemApp'
 
     if validateMeetingForm($scope.meeting)
       console.log $scope.meeting
-      Meeting.updateMeeting($scope.meeting).$promise.then ->
-        Email.sendMeetingInvite({
-          meeting_id: $scope.meeting.id
+      Meeting.meeting.update($scope.meeting).$promise.then ->
+        Meeting.meeting.send({
+          id: $scope.meeting.id
           meeting_summary: $scope.meeting.details.what
           meeting_location: $scope.meeting.details.location
           meeting_time_selection: $scope.meeting.timeSelections
           meeting_length: $scope.meeting.length_in_min
         })
-        console.log 'Meeting submitted'
+        $analytics.eventTrack('Successfully sent meeting')
         $location.path('/success')
-      .catch ->
-        console.log 'Submission error'
+      .catch (err) ->
+        console.error err
+        $analytics.eventTrack('Failed sending meeting')
     else
       $analytics.eventTrack('Form Invalidation Message')
       inform.add("You need to fill out all of the fields before your meeting \
