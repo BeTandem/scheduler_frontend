@@ -73,7 +73,7 @@ angular.module 'tandemApp', [
 
   # Auth Providers
   $authProvider.google
-    url: apiUrl + "login"
+    url: apiUrl + "user/login"
     optionalUrlParams: ['access_type']
     accessType: "offline"
     scope: [
