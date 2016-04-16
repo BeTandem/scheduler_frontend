@@ -5,6 +5,16 @@ div.col-lg-8.col-lg-offset-2.action-page
       i.icon.icon-envelope-o
     h2 Meeting Scheduled!
     h5 We'll send out the invites right away
+    p <strong>What</strong>: {{event.summary}} <br/>
+      | <strong>Where</strong>: {{event.location}} <br/>
+      | <strong>When</strong>: {{event.humanStartTime}}
+    .panel.panel-success(style="text-align: left")
+      .panel-heading
+        h5 Meeting Attendees
+      ul.list-group
+        li.list-group-item(ng-repeat="attendee in event.attendees")
+          p {{attendee.email}}
+
 
     div#success-social.action-page--foot
       h5 Love Tandem? Spread the news!
