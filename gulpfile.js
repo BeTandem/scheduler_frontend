@@ -57,9 +57,11 @@ gulp.task('clean', function() {
 
 // Render coffescript to js
 gulp.task('coffee', function(){
-  gulp.src('./app/**/*.coffee')
-    .pipe(coffee({bare: false}).on('error', gutil.log))
-    .pipe(gulp.dest(config.buildDir));
+  if (!gutil.env.webstorm) {
+    gulp.src('./app/**/*.coffee')
+        .pipe(coffee({bare: false}).on('error', gutil.log))
+        .pipe(gulp.dest(config.buildDir));
+  }
   // copy in config file
   gulp.src('./config/*')
     .pipe(gulp.dest(config.buildDir + '/js/config'));
