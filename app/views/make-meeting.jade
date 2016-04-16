@@ -47,14 +47,15 @@ div.meeting(ng-class="formSubmitted ? 'form-submitted' : ''")
         i.icon.icon-exclamation-triangle
         span Not all attendees are Tandem users. This calendar doesn't reflect their availability.
     div.calendar.col-lg-12
+      div.hidden#current-selection
       div.day(id="{{day.day_code}}" ng-repeat="day in meeting.schedule")
         span {{day.day_code}}
         div.times
-          div.morning(selectable id="{{day.day_code}}.morning" class="{{day.morning.length ? 'available' : 'unavailable'}}" analytics-on="click" analytics-event="Select Time")
+          div.morning(selectable data="meeting.schedule[$index]['morning']" callback="selectTime" id="{{day.day_code}}.morning" class="{{day.morning.length ? 'available' : 'unavailable'}}" analytics-on="click" analytics-event="Select Time")
             i.icon.icon-4x.icon-sunrise
-          div.afternoon(selectable id="{{day.day_code}}.afternoon" class="{{day.afternoon.length ? 'available' : 'unavailable'}}" analytics-on="click" analytics-event="Select Time")
+          div.afternoon(selectable data="meeting.schedule[$index]['afternoon']" callback="selectTime" id="{{day.day_code}}.afternoon" class="{{day.afternoon.length ? 'available' : 'unavailable'}}" analytics-on="click" analytics-event="Select Time")
             i.icon.icon-4x.icon-sun
-          div.evening(selectable id="{{day.day_code}}.evening" class="{{day.evening.length ? 'available' : 'unavailable'}}" analytics-on="click" analytics-event="Select Time")
+          div.evening(selectable data="meeting.schedule[$index]['evening']" callback="selectTime" id="{{day.day_code}}.evening" class="{{day.evening.length ? 'available' : 'unavailable'}}" analytics-on="click" analytics-event="Select Time")
             i.icon.icon-4x.icon-moon
       div.chunks
         div

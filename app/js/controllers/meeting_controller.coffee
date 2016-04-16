@@ -10,6 +10,7 @@ angular.module 'tandemApp'
   $scope.meeting.details = {}
   $scope.meeting.details.duration = 60
   $scope.meeting.calendar_hours = {}
+  $scope.meeting.timeSelection = null
   $scope.meeting.schedule = [
       day_code: 'm',
       morning: true,
@@ -80,6 +81,7 @@ angular.module 'tandemApp'
           isTandemUser: isTandemUser
         $scope.meeting.attendees.push newAttendee
         $scope.meeting.schedule = res.schedule
+        $scope.meeting.timeSelection = null
 
         $scope.newEmail = ''
       .catch (err) ->
@@ -107,6 +109,7 @@ angular.module 'tandemApp'
         .$promise.then (res) ->
           $scope.meeting.attendees.splice(index, 1)
           $scope.meeting.schedule = res.schedule
+          $scope.meeting.timeSelection = null
 
         .catch (err) ->
           console.error err
@@ -119,10 +122,14 @@ angular.module 'tandemApp'
     $scope.meeting.length_in_min = length_in_min
     Meeting.meeting.update($scope.meeting).$promise.then (res)->
       $scope.meeting.schedule = res.schedule
+      $scope.meeting.timeSelection = null
     .catch (err) ->
       console.error err
       $analytics.eventTrack('Error Updating Meeting Length')
       inform.add("Unable to update meeting length", {type: "danger"})
+
+  $scope.selectTime = (time) ->
+    $scope.meeting.timeSelection = time
 
   $scope.submitMeeting = ->
     $scope.formSubmitted = true
@@ -136,7 +143,7 @@ angular.module 'tandemApp'
         false
       else if meeting.attendees.length == 0
         false
-      else if meeting.timeSelections.length == 0
+      else if !$scope.meeting.timeSelection
         false
       else if !$scope.meeting.length_in_min
         false
@@ -149,17 +156,7 @@ angular.module 'tandemApp'
         location: document.getElementById("location").value
       $scope.meeting.details = details
 
-    getTimeSelection = ->
-      times = []
-      for selection in document.getElementsByClassName("selected")
-        time_selection = selection.id.split(".")
-        for day in $scope.meeting.schedule
-          if day['day_code'] == time_selection[0]
-            times.push slot for slot in day[time_selection[1]]
-      $scope.meeting.timeSelections = times
-
     getDetails()
-    getTimeSelection()
 
     if validateMeetingForm($scope.meeting)
       console.log $scope.meeting
@@ -168,7 +165,7 @@ angular.module 'tandemApp'
           id: $scope.meeting.id
           meeting_summary: $scope.meeting.details.what
           meeting_location: $scope.meeting.details.location
-          meeting_time_selection: $scope.meeting.timeSelections
+          meeting_time_selection: $scope.meeting.timeSelection
           meeting_length: $scope.meeting.length_in_min
         })
         $analytics.eventTrack('Successfully sent meeting')
