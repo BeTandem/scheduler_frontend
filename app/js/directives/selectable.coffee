@@ -29,7 +29,7 @@ angular.module 'tandemApp'
     html = "<div class='times'>"
     angular.forEach scope.data, (time) ->
       html += "<a class='sweet-alert-button'"
-      html += 'onclick=\''
+      html += 'onclick=\'$("#current-selection").removeData();'
       html += '$("#current-selection").attr("data-start", "' + time.start + '");'
       html += '$("#current-selection").attr("data-end", "' + time.end + '");'
       html += '$(".confirm").trigger("click")\' >'
@@ -69,7 +69,7 @@ angular.module 'tandemApp'
 
     else if !elem.hasClass 'unavailable'
       # Comment to allow selecting multiple times
-      mine = SweetAlert.swal {
+      SweetAlert.swal {
         title: "What time?"
         html: true
         text: buildTimesHtml(scope)
@@ -79,13 +79,13 @@ angular.module 'tandemApp'
         closeOnConfirm: true
       }, (confirm) ->
         if confirm
-          selection = $('#current-selection').data()
+          selection =
+            start: $('#current-selection').data("start")
+            end:$('#current-selection').data("end")
           scope.callback selection
           angular.forEach items, (el) ->
             el.removeClass TOGGLE_CLASS
           elem.addClass TOGGLE_CLASS
-        else
-          console.log scope
 
 
 
