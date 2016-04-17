@@ -3,7 +3,7 @@
 angular.module 'tandemApp'
 
 .controller 'MeetingController',
-($scope, $location, Meeting, Attendee, Email, inform, SweetAlert, $analytics) ->
+($scope, $state, Meeting, Attendee, Email, inform, SweetAlert, $analytics) ->
   $scope.formSubmitted = false
   $scope.meeting = {}
   $scope.meeting.attendees = []
@@ -167,12 +167,15 @@ angular.module 'tandemApp'
           meeting_location: $scope.meeting.details.location
           meeting_time_selection: $scope.meeting.timeSelection
           meeting_length: $scope.meeting.length_in_min
-        })
-        $analytics.eventTrack('Successfully sent meeting')
-        $location.path('/success')
+        }).$promise.then (event) ->
+          $analytics.eventTrack('Successfully sent meeting')
+          $state.go("success", {event: event})
+        .catch (err) ->
+          console.error err
+          $analytics.eventTrack('Failed sending meeting')
       .catch (err) ->
         console.error err
-        $analytics.eventTrack('Failed sending meeting')
+        $analytics.eventTrack('Failed Updating meeting')
     else
       $analytics.eventTrack('Form Invalidation Message')
       inform.add("You need to fill out all of the fields before your meeting \

@@ -48,7 +48,8 @@ angular.module 'tandemApp', [
     .state "success",
       url: "/success"
       templateUrl: "./views/success.html",
-      controller: ""
+      controller: "SuccessController"
+      params: {event: null}
       resolve:
         loginRequired: loginRequired
     .state "logout",
