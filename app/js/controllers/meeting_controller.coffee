@@ -181,7 +181,6 @@ angular.module 'tandemApp'
     getDetails()
 
     if validateMeetingForm($scope.meeting)
-      console.log $scope.meeting
       Meeting.meeting.update($scope.meeting).$promise.then ->
         Meeting.meeting.send({
           id: $scope.meeting.id

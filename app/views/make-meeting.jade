@@ -42,7 +42,7 @@ div.meeting(ng-class="formSubmitted ? 'form-submitted' : ''")
   div.col-lg-12.when
     h2 When is it
     div.instructions-box.col-lg-10(ng-class="meeting.timeSelections.length == 0 ? 'instructions-box--invalid' : ''")
-      div: span Choose a block of time below and we will automatically find the best meeting time within it that works for everyone.
+      div: span Click a block of time below and choose from the list of times to select the best time to meet.
       div(ng-if="!allAttendeesRegistered()").instruction--warning
         i.icon.icon-exclamation-triangle
         span Not all attendees are Tandem users. This calendar doesn't reflect their availability.
