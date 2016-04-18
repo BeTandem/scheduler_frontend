@@ -4,17 +4,22 @@ angular.module('tandemApp')
   .factory 'Meeting', ($resource, apiUrl) ->
     #This will be more fleshed out when backend API is defined
     meeting: $resource apiUrl+'meeting/:id',
-        {id: '@id'},
-        {
-          'get': {method: 'GET'},
-          'create': {method: 'GET'}
-          'update': {method: 'PUT'}
-          'send': {method: 'POST'}
-        }
+      {id: '@id'},
+      {
+        'get': {method: 'GET'},
+        'create': {method: 'GET'}
+        'update': {method: 'PUT'}
+        'send': {method: 'POST'}
+      }
     attendee: $resource apiUrl+'meeting/:id/attendee/:email',
-        {id: '@id', email: "@email"},
-        {
-          'add': {method: 'POST'}
-          'remove': {method: 'DELETE'}
-        }
+      {id: '@id', email: "@email"},
+      {
+        'add': {method: 'POST'}
+        'remove': {method: 'DELETE'}
+      }
 
+    calendar: $resource apiUrl+'meeting/:id/calendar/:sendDate',
+      {id: '@id', sendDate: '@sendDate'},
+      {
+        'get': {method: 'GET'}
+      }
