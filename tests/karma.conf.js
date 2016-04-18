@@ -18,10 +18,14 @@ module.exports = function(config) {
     '../bower_components/angular-bootstrap/ui-bootstrap.js',
     '../bower_components/jquery/dist/jquery.js',
     '../bower_components/satellizer/satellizer.js',
+    '../bower_components/sweetalert/dist/sweetalert.min.js',
+    '../bower_components/ngSweetAlert/SweetAlert.js',
+    '../bower_components/angular-inform/dist/angular-inform.js',
+    '../bower_components/angular-animate/angular-animate.js',
+    '../bower_components/angular-jwt/dist/angular-jwt.js',
     '../app/**/*.coffee',
     './unit/**/*.coffee'
   ],
-
   // list of files to exclude
   exclude: [
 

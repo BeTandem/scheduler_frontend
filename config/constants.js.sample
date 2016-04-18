@@ -1,0 +1,8 @@
+'use strict';
+
+angular
+  .module('tandemApp')
+  .constant('googleConfig', {
+    'clientId': 'XXXXXXXXXXXXXXXXXXXXXX'
+    });
+  .constant('apiUrl', 'http://localhost:3000/api/v1/')

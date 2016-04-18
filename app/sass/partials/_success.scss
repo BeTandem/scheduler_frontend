@@ -1,0 +1,35 @@
+#success-icon {
+  height: 10em;
+  width: 100%;
+  line-height: 10em;
+
+  .icon-check {
+    font-size: 4em;
+    color: $brand-success;
+    z-index: 1;
+    left: 5px;
+    top: 30px;
+  }
+
+  .icon-envelope-o {
+    font-size: 10em;
+  }
+}
+
+#success-social {
+  i {
+    padding-right: $padding-base-horizontal;
+  }
+}
+
+#success-feedback {
+  margin-top: 40px;
+}
+
+.icon.icon-social {
+  transition: all .3s;
+
+  &:hover {
+    color: $gray-dark;
+  }
+}

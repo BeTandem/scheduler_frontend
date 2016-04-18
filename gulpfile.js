@@ -57,10 +57,14 @@ gulp.task('clean', function() {
 
 // Render coffescript to js
 gulp.task('coffee', function(){
-  gulp.src('./app/**/*.coffee')
-    .pipe(coffee({bare: false}).on('error', gutil.log))
-    .pipe(gulp.dest(config.buildDir));
-
+  if (!gutil.env.webstorm) {
+    gulp.src('./app/**/*.coffee')
+        .pipe(coffee({bare: false}).on('error', gutil.log))
+        .pipe(gulp.dest(config.buildDir));
+  }
+  // copy in config file
+  gulp.src('./config/*')
+    .pipe(gulp.dest(config.buildDir + '/js/config'));
   // Production Uglify
   if(config.prod){
     gulp.src([config.prodDir + '/**/*.js'])
@@ -100,6 +104,11 @@ gulp.task('jade', function(){
 gulp.task('copy-img', function () {
   gulp.src('./app/images/**/*')
     .pipe(gulp.dest(config.buildDir + '/images'));
+});
+
+gulp.task('copy-font', function () {
+  gulp.src('./app/fonts/**/*')
+    .pipe(gulp.dest(config.buildDir + '/fonts'));
 });
 
 // Setup bower dependencies
@@ -165,5 +174,5 @@ gulp.task('watch', function() {
 
 // default task
 gulp.task('default',
-  ['lint', 'coffee', 'sass', 'jade', 'copy-img', 'bower', 'serve', 'watch']
+  ['lint', 'coffee', 'sass', 'jade', 'copy-img', 'copy-font', 'bower', 'serve', 'watch']
 );

@@ -1,49 +1,87 @@
 'use strict'
 
 angular.module 'tandemApp', [
-  'ngRoute'
+  'ui.router'
   'ngResource'
+  'ngAnimate'
   'ui.bootstrap'
   'satellizer'
+  'oitozero.ngSweetAlert'
+  'inform'
+  'inform-exception'
+  'inform-http-exception'
+  'angular-jwt'
+  'angulartics'
+  'angulartics.mixpanel'
 ]
-.constant "CONST",
-  "API_URL": "http://localhost:3000/api/v1/"
 
-.config ($routeProvider) ->
-  $routeProvider
-    .when "/",
-      templateUrl: "./views/make-meeting.html",
-      controller: "MainController"
-    .when "/login",
+.config ($stateProvider, $urlRouterProvider) ->
+  skipIfLoggedIn = ($q, $auth, $location) ->
+    deferred = $q.defer()
+    if ($auth.isAuthenticated())
+      $location.path('/create-meeting')
+    else
+      deferred.resolve()
+    return deferred.promise
+
+  loginRequired = ($q, $auth, $location) ->
+    deferred = $q.defer()
+    if ($auth.isAuthenticated())
+      deferred.resolve()
+    else
+      $location.path('/login')
+    return deferred.promise
+
+  $stateProvider
+    .state "home",
+      url: "/"
       templateUrl: "./views/login.html",
       controller: "LoginController"
-    .when "/logout",
+      resolve:
+        skipIfLoggedIn: skipIfLoggedIn
+    .state "meeting",
+      url: '/create-meeting'
+      templateUrl: "./views/make-meeting.html",
+      controller: "MeetingController"
+      resolve:
+        loginRequired: loginRequired
+    .state "success",
+      url: "/success"
+      templateUrl: "./views/success.html",
+      controller: "SuccessController"
+      params: {event: null}
+      resolve:
+        loginRequired: loginRequired
+    .state "logout",
+      url: "/logout"
       template: "",
       controller: "LogoutController"
-    .otherwise
-      redirectTo: '/'
+
+  $urlRouterProvider.otherwise '/'
+
 
 .config ($locationProvider) ->
   # Enable pretty urls (without '/#')
   $locationProvider.html5Mode(true)
 
-.config ($authProvider, CONST) ->
+.config ($analyticsProvider) ->
+  $analyticsProvider.firstPageview(true)
+  $analyticsProvider.withAutoBase(true)
+
+.config ($authProvider, apiUrl, googleConfig) ->
   # Satelizer Settings
   $authProvider.storageType = 'localStorage'
 
   # Auth Providers
   $authProvider.google
-    url: CONST.API_URL + "login"
-    access_type: "offline"
+    url: apiUrl + "user/login"
+    optionalUrlParams: ['access_type']
+    accessType: "offline"
     scope: [
       'profile'
       'email'
       'https://www.googleapis.com/auth/calendar'
     ]
-    clientId: '249264490300-27p809lag3hg5jhhnaufog8m25i2afhm'+
-    '.apps.googleusercontent.com'
+    clientId: googleConfig.clientId
 
-.run ($auth, $location) ->
-  # Punt from pageload if no auth present
-  if !$auth.isAuthenticated()
-    $location.url('login')
+

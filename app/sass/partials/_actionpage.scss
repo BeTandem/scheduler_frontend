@@ -1,0 +1,23 @@
+.action-page {
+  margin-top: 10%;
+  padding: 50px 100px;
+  background-color: $gray-lighter;
+  border-radius: $border-radius-large;
+
+  &--content {
+    display: table;
+    margin: 0 auto;
+    text-align: center;
+
+  }
+
+  &--foot {
+    margin-top: $line-height-computed * 2;
+    border-top: 1px solid $gray-light;
+
+    a {
+      text-decoration: none;
+      color: $gray;
+    }
+  }
+}

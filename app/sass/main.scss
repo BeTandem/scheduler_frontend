@@ -1,16 +1,21 @@
-@import "partials/globals";
 @import "partials/vendor_overrides";
+@import "partials/globals";
 @import "partials/bootstrap_tweaks";
 
 /* Sass Bower Dependencies */
 // bower:scss
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
-@import "../../bower_components/font-awesome/scss/font-awesome.scss";
 // endbower
+
+@import "icotandem";
+
+@import "partials/actionpage";
 
 @import "partials/login";
 @import "partials/header";
+@import "partials/notifications";
 @import "partials/makemeeting";
+@import "partials/success";
 
 html{
   color: $primary-text;

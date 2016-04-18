@@ -1,19 +1,77 @@
-div.meeting
-  div.details
+div.meeting(ng-class="formSubmitted ? 'form-submitted' : ''")
+  div.col-lg-12.details
     h2 The details
     form.col-lg-8
-      div.form-inline
+      div.form-inline.row
+        div.form-group.col-lg-6
+          input#what.form-control(ng-model="meeting.details.what" placeholder="What" analytics-on="focusout")
         div.form-group
-          input#what.form-control(ng-model="meeting.details.what" placeholder="What")
+          input#location.form-control(ng-model="meeting.details.location" placeholder="Where" analytics-on="focusout")
         div.form-group
-          input#location.form-control(ng-model="meeting.details.location" placeholder="Where")
-        div.form-group
-          select.form-control(ng-model="meeting.details.duration")
-             option 30 minutes
-             option 1 hour
-             option 1.5 hours
-             option 2 hours
-             option 2.5 hours
-             option 3 hours
+          select#duration.form-control(ng-model="meeting.details.duration" required ng-change="setMeetingLength(meeting.details.duration)" analytics-on="change")
+            option(value="" disabled selected hidden) How long
+            option(value="15") 15 minutes
+            option(value="30") 30 minutes
+            option(value="60") 60 minutes
+  div.col-lg-12.attendees
+    h2 Who's coming
+    form.form-inline
+      div.form-group.col-lg-5
+        input#email.form-control(ng-model="newEmail" placeholder="Email" type="email")
       div.form-group
-          textarea#why.form-control(ng-model="meeting.details.why" placeholder="Why")
+        button.icon(ng-click="addAttendee()" type="submit" analytics-on="click" analytics-event="Add Attendee")
+          i.icon.icon-plus.icon--primary.success
+
+    div.col-lg-6.attendee-list(ng-class="!meeting.attendees.length && formSubmitted ? 'attendee-list--invalid' : ''")
+
+      div(ng-if="!meeting.attendees.length")
+        span Add emails above and we'll update the calendar below to reflect everyone's schedule.
+      div(ng-repeat="attendee in meeting.attendees")
+        div(ng-if="attendee.isTandemUser").attendee-list__attendee.attendee-list__attendee--registered
+          span {{attendee.name}}
+          span {{attendee.email}}
+          button.icon(ng-click="deleteAttendee($index)" analytics-on="click" analytics-event="Remove Attendee")
+            i.icon.icon-times-circle.warn
+        div(ng-if="!attendee.isTandemUser").attendee-list__attendee.attendee-list__attendee--unregistered
+          i(title="").icon.icon-exclamation-triangle
+          span {{attendee.email}} is not in Tandem.&nbsp;
+            a(href="mailto:{{attendee.email}}?subject=Join Tandem&body=https://beta.betandem.com/" analytics-on="click" analytics-event="Invite someone").invite Invite?
+          button.icon(ng-click="deleteAttendee($index)")
+            i.icon.icon-times-circle.warn
+
+  div.col-lg-12.when
+    h2 When is it
+    div.instructions-box.col-lg-10(ng-class="meeting.timeSelections.length == 0 ? 'instructions-box--invalid' : ''")
+      div: span Click a block of time below and choose from the list of times to select the best time to meet.
+      div(ng-if="!allAttendeesRegistered()").instruction--warning
+        i.icon.icon-exclamation-triangle
+        span Not all attendees are Tandem users. This calendar doesn't reflect their availability.
+    div.row
+      div.calendar.col-xs-6
+        a(class="btn btn-primary" ng-if="has_prev" ng-click="getCalendar('prev', prev)") Previous week
+      div.calendar.col-xs-6(style="display: block")
+        a(style="float:right;" class="btn btn-primary" ng-if="has_next" ng-click="getCalendar('next', next)") Next week
+    div.calendar.col-lg-12
+      div.hidden#current-selection
+      div.day(id="{{day.day_code}}" ng-repeat="day in meeting.schedule")
+        span {{day.day_code}}
+        div.times
+          div.morning(selectable data="meeting.schedule[$index]['morning']" callback="selectTime" id="{{day.day_code}}.morning" class="{{day.morning.length ? 'available' : 'unavailable'}}" analytics-on="click" analytics-event="Select Time")
+            i.icon.icon-4x.icon-sunrise
+          div.afternoon(selectable data="meeting.schedule[$index]['afternoon']" callback="selectTime" id="{{day.day_code}}.afternoon" class="{{day.afternoon.length ? 'available' : 'unavailable'}}" analytics-on="click" analytics-event="Select Time")
+            i.icon.icon-4x.icon-sun
+          div.evening(selectable data="meeting.schedule[$index]['evening']" callback="selectTime" id="{{day.day_code}}.evening" class="{{day.evening.length ? 'available' : 'unavailable'}}" analytics-on="click" analytics-event="Select Time")
+            i.icon.icon-4x.icon-moon
+      div.chunks
+        div
+          span Morning
+          span {{meeting.calendar_hours.morning_start}}-{{meeting.calendar_hours.morning_end}}
+        div
+          span Afternoon
+          span {{meeting.calendar_hours.afternoon_start}}-{{meeting.calendar_hours.afternoon_end}}
+        div
+          span Evening
+          span {{meeting.calendar_hours.evening_start}}-{{meeting.calendar_hours.evening_end}}
+
+  div#submit.col-lg-2.col-lg-offset-10
+    button.btn.btn-lg.btn-primary(ng-click="submitMeeting()" analytics-on="click" analytics-event="Schedule Meeting") Schedule it

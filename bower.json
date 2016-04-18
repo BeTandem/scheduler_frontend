@@ -16,14 +16,22 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.4.8",
-    "angular-route": "~1.4.8",
-    "bootstrap-sass": "~3.3.5",
-    "angular-resource": "~1.4.8",
-    "angular-mocks": "~1.4.8",
-    "font-awesome": "~4.5.0",
-    "angular-bootstrap": "~1.1.2",
-    "satellizer": "^0.13.4"
+    "angular": "~1.5.3",
+    "bootstrap-sass": "~3.3.6",
+    "angular-resource": "~1.5.3",
+    "angular-mocks": "~1.5.3",
+    "angular-bootstrap": "~1.2.5",
+    "satellizer": "^0.14.0",
+    "angular-inform": "betandem/angular-inform#fb6fc001ce1548f4f5b90d9b688207f1db2422ef",
+    "ngSweetAlert": "oitozero/ngSweetAlert#8df6c30b0996f09cb4cf5e90a41115a6c09fa852",
+    "angular-animate": "~1.5.3",
+    "angular-jwt": "^0.0.9",
+    "angulartics": "^1.0.3",
+    "angulartics-mixpanel": "^0.1.2",
+    "angular-ui-router": "^0.2.18"
   },
-  "private": true
+  "private": true,
+  "resolutions": {
+    "angular": "1.5.3"
+  }
 }

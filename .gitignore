@@ -19,3 +19,7 @@
 
 # CircleCi Reporting
 /tests/reports
+
+#Config Ignore
+/config/*.js
+

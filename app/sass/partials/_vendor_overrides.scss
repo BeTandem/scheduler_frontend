@@ -17,8 +17,9 @@ $gray-base:              #000;
 $gray-darker:            lighten($gray-base, 13.5%); // #222
 $gray-dark:              lighten($gray-base, 20%);   // #333
 $gray:                   lighten($gray-base, 33.5%); // #555
-$gray-light:             lighten($gray-base, 46.7%); // #777
-$gray-lighter:           lighten($gray-base, 93.5%); // #eee
+$gray-light:             lighten($gray-base, 60%);
+$gray-lighter:           lighten($gray-base, 85%);
+$gray-lightest:          lighten($gray-base, 96%);
 
 $brand-primary:         $tandem-green; // #337ab7
 $brand-success:         #5cb85c;
@@ -113,7 +114,7 @@ $line-height-small:         1.5;
 
 $border-radius-base:        4px;
 $border-radius-large:       6px;
-$border-radius-small:       3px;
+$border-radius-small:       2px;
 
 //** Global color for active items (e.g., navs or dropdowns).
 $component-active-color:    #fff;

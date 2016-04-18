@@ -12,4 +12,4 @@ angular.module 'tandemApp'
 .controller 'LogoutController', ($location, $auth) ->
   # Remove auth token and redirect to login
   $auth.removeToken()
-  $location.path 'login'
+  $location.path '/login'

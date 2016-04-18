@@ -1,0 +1,34 @@
+div.col-lg-8.col-lg-offset-2.action-page
+  div.action-page--content
+    span#success-icon.icon-stack
+      i.icon.icon-check
+      i.icon.icon-envelope-o
+    h2 Meeting Scheduled!
+    h5 We'll send out the invites right away
+    p <strong>What</strong>: {{event.summary}} <br/>
+      | <strong>Where</strong>: {{event.location}} <br/>
+      | <strong>When</strong>: {{event.humanStartTime}}
+    .panel.panel-success(style="text-align: left")
+      .panel-heading
+        h5 Meeting Attendees
+      ul.list-group
+        li.list-group-item(ng-repeat="attendee in event.attendees")
+          p {{attendee.email}}
+
+
+    div#success-social.action-page--foot
+      h5 Love Tandem? Spread the news!
+      a(href="http://www.facebook.com/share.php?u=https://betandem.com&title=I+just+scheduled+a+group+meeting+in+less+than+30+seconds+with+Tandem+Scheduler"
+        target="_blank"
+        analytics-on="click"
+        analytics-event="Share via Facebook"
+        ): i.icon.icon-2x.icon-facebook.icon-social
+      a(href="http://twitter.com/intent/tweet?status=I+just+scheduled+a+group+meeting+in+less+than+30+seconds+@TandemScheduler:+https://betandem.com"
+        target="_blank"
+        analytics-on="click"
+        analytics-event="Share via Twitter"
+        ): i.icon.icon-2x.icon-twitter.icon-social
+
+    div#success-feedback
+      h6 Have feedback to make Tandem better? &nbsp;
+        a(href="mailto:tandemscheduler@gmail.com?subject=Tandem Scheduler Feedback") Send us a messsage

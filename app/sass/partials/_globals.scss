@@ -9,6 +9,10 @@ $purple-darker: darken($purple, 15%);
   background-color: #eeeeee;
  }
 
+a:hover {
+ text-decoration: none !important;
+}
+
 .main {
   padding: 20px;
 }
@@ -20,4 +24,37 @@ $purple-darker: darken($purple, 15%);
 }
 .main .page-header {
   margin-top: 0;
+}
+
+.infotip {
+  display: inline;
+  position: relative;
+
+  /* tooltip box */
+  &:hover:after {
+    background: transparentize($gray-dark, .1);
+    border-radius: $border-radius-base;
+    bottom: -20px;
+    color: $gray-lightest;
+    content: attr(title);
+    left: 130%;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 1;
+    width: 220px;
+    font-weight: 300;
+    font-size: $font-size-small;
+  }
+
+  /* tooltip triangle */
+  &:hover:before {
+    color: transparent;
+    border: solid;
+    border-right-color: transparentize($gray-dark, .1);
+    border-width: 6px 6px 6px 0;
+    content: "";
+    left: 95%;
+    position: absolute;
+    z-index: 99;
+  }
 }
