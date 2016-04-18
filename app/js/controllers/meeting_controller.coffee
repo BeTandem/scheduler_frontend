@@ -5,6 +5,10 @@ angular.module 'tandemApp'
 .controller 'MeetingController',
 ($scope, $state, Meeting, Attendee, Email, inform, SweetAlert, $analytics) ->
   $scope.formSubmitted = false
+  $scope.has_next = null
+  $scope.has_prev = null
+  $scope.next = null
+  $scope.prev = null
   $scope.meeting = {}
   $scope.meeting.attendees = []
   $scope.meeting.details = {}
@@ -39,6 +43,7 @@ angular.module 'tandemApp'
   ]
 
   Meeting.meeting.create().$promise.then (res) ->
+    updatePrevNext(res)
     $scope.meeting.id = res.meeting_id
     $scope.meeting.schedule = res.schedule
     for key, time of res.calendar_hours
@@ -66,6 +71,7 @@ angular.module 'tandemApp'
 
       Meeting.attendee.add({id:$scope.meeting.id}, emailToAdd)
       .$promise.then (res) ->
+        updatePrevNext(res)
         $analytics.eventTrack('Successfully Added Attendee')
         isTandemUser = false
         name = ''
@@ -107,6 +113,7 @@ angular.module 'tandemApp'
 
         Meeting.attendee.remove({id: $scope.meeting.id}, emailToDelete)
         .$promise.then (res) ->
+          updatePrevNext(res)
           $scope.meeting.attendees.splice(index, 1)
           $scope.meeting.schedule = res.schedule
           $scope.meeting.timeSelection = null
@@ -121,6 +128,7 @@ angular.module 'tandemApp'
   $scope.setMeetingLength = (length_in_min) ->
     $scope.meeting.length_in_min = length_in_min
     Meeting.meeting.update($scope.meeting).$promise.then (res)->
+      updatePrevNext(res)
       $scope.meeting.schedule = res.schedule
       $scope.meeting.timeSelection = null
     .catch (err) ->
@@ -130,6 +138,20 @@ angular.module 'tandemApp'
 
   $scope.selectTime = (time) ->
     $scope.meeting.timeSelection = time
+
+  $scope.getCalendar = (direction, time) ->
+    Meeting.calendar.get {
+      id: $scope.meeting.id
+      sendDate: time
+    }
+    .$promise.then (res) ->
+      updatePrevNext(res)
+      $scope.meeting.schedule = res.schedule
+      $scope.meeting.timeSelection = null
+      $analytics.eventTrack('Successfully got ' + direction + ' calendar')
+    .catch (err) ->
+      console.error err
+      $analytics.eventTrack('Failed getting ' + direction + ' calendar')
 
   $scope.submitMeeting = ->
     $scope.formSubmitted = true
@@ -159,7 +181,6 @@ angular.module 'tandemApp'
     getDetails()
 
     if validateMeetingForm($scope.meeting)
-      console.log $scope.meeting
       Meeting.meeting.update($scope.meeting).$promise.then ->
         Meeting.meeting.send({
           id: $scope.meeting.id
@@ -181,3 +202,20 @@ angular.module 'tandemApp'
       inform.add("You need to fill out all of the fields before your meeting \
                   can be scheduled.", {type: "danger"})
       console.log 'Form validation failed'
+
+  updatePrevNext = (input) ->
+    $scope.has_next = input.has_next
+    $scope.has_prev = input.has_prev
+
+    if input.has_next
+      $scope.next = input.next
+    else
+      $scope.next = null
+
+    if input.has_prev
+      $scope.prev = input.prev
+    else
+      $scope.prev = null
+
+
+

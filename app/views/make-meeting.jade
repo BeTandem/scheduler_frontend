@@ -42,10 +42,15 @@ div.meeting(ng-class="formSubmitted ? 'form-submitted' : ''")
   div.col-lg-12.when
     h2 When is it
     div.instructions-box.col-lg-10(ng-class="meeting.timeSelections.length == 0 ? 'instructions-box--invalid' : ''")
-      div: span Choose a block of time below and we will automatically find the best meeting time within it that works for everyone.
+      div: span Click a block of time below and choose from the list of times to select the best time to meet.
       div(ng-if="!allAttendeesRegistered()").instruction--warning
         i.icon.icon-exclamation-triangle
         span Not all attendees are Tandem users. This calendar doesn't reflect their availability.
+    div.row
+      div.calendar.col-xs-6
+        a(class="btn btn-primary" ng-if="has_prev" ng-click="getCalendar('prev', prev)") Previous week
+      div.calendar.col-xs-6(style="display: block")
+        a(style="float:right;" class="btn btn-primary" ng-if="has_next" ng-click="getCalendar('next', next)") Next week
     div.calendar.col-lg-12
       div.hidden#current-selection
       div.day(id="{{day.day_code}}" ng-repeat="day in meeting.schedule")
@@ -67,5 +72,6 @@ div.meeting(ng-class="formSubmitted ? 'form-submitted' : ''")
         div
           span Evening
           span {{meeting.calendar_hours.evening_start}}-{{meeting.calendar_hours.evening_end}}
+
   div#submit.col-lg-2.col-lg-offset-10
     button.btn.btn-lg.btn-primary(ng-click="submitMeeting()" analytics-on="click" analytics-event="Schedule Meeting") Schedule it
