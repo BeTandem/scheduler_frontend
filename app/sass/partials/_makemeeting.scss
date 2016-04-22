@@ -53,7 +53,9 @@ body {
   }
 
   .add-attendee{
-    margin-top: 7px;
+    margin-top: 3px;
+    height:25px;
+    padding-top: 3px;
   }
 
   .attendee-list {
@@ -132,18 +134,18 @@ body {
       margin-right: $padding-xs-horizontal;
     }
   }
-  .scroller{
-    overflow:hidden;
-    width:100%;
+  @media (max-width:808px) {
+    .scroller {
+      overflow-x: scroll;
+      width: 100%;
+    }
   }
   .calendar {
     display: -webkit-flex;
     display: flex;
     -webkit-flex-flow: row;
     flex-flow: row;
-    @media (max-width:808px){
-      overflow-x: scroll;
-    }
+    min-width: 809px;
 
     .chunks {
       flex: 0 1 5%;

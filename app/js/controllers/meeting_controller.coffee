@@ -3,7 +3,7 @@
 angular.module 'tandemApp'
 
 .controller 'MeetingController',
-($scope, $state, Meeting, Attendee, Email, inform, SweetAlert, $analytics) ->
+($scope, $state, Meeting, inform, SweetAlert, $analytics) ->
   $scope.formSubmitted = false
   $scope.has_next = null
   $scope.has_prev = null
