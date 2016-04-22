@@ -30,8 +30,11 @@ body {
   }
 
   .details {
-    .form-group:not(:last-child) {
-      padding-right: 15px;
+    //.form-group:not(:last-child) {
+    //  padding-right: 15px;
+    //}
+    .form-group {
+      padding-left:0;
     }
 
     .form-control.ng-touched {
@@ -46,12 +49,15 @@ body {
   }
 
   .attendees form button {
+    //margin-top: 7px;
+  }
+
+  .add-attendee{
     margin-top: 7px;
   }
 
   .attendee-list {
     padding: 15px;
-    margin-left: 15px;
     margin-top: $padding-large-vertical;
     background-color: $gray-lighter;
     border-radius: $border-radius-small;
@@ -60,8 +66,8 @@ body {
       border: 1px solid $brand-danger;
     }
 
-    > div:not(:last-child) {
-      padding-bottom: $padding-base-vertical;
+    .attendee-list-item:not(:last-child) {
+      padding-bottom: $padding-base-vertical * 2;
     }
 
     &__attendee {
@@ -73,6 +79,12 @@ body {
         margin-right: $padding-small-horizontal;
       }
 
+      @media (max-width: 400px) {
+        .name {
+          display: inline-block;
+          width: 100%;
+        }
+      }
       &--unregistered {
         a.invite  {
           color: $gray-light;
@@ -96,7 +108,6 @@ body {
     background-color: $gray-lighter;
     border-radius: $border-radius-small;
     padding: 15px;
-    margin-left: 15px;
     margin-top: $padding-large-vertical;
     margin-bottom: $padding-large-vertical;
 
@@ -104,9 +115,9 @@ body {
       border: 1px solid $brand-danger;
     }
 
-    > div:not(:last-child) {
-      margin-bottom: $padding-base-vertical;
-    }
+    //> div:not(:last-child) {
+    //  margin-bottom: $padding-base-vertical;
+    //}
 
     .instruction--warning span {
       font-weight: 500;
@@ -121,12 +132,18 @@ body {
       margin-right: $padding-xs-horizontal;
     }
   }
-
+  .scroller{
+    overflow:hidden;
+    width:100%;
+  }
   .calendar {
     display: -webkit-flex;
     display: flex;
     -webkit-flex-flow: row;
     flex-flow: row;
+    @media (max-width:808px){
+      overflow-x: scroll;
+    }
 
     .chunks {
       flex: 0 1 5%;
@@ -239,8 +256,11 @@ body {
   }
 }
 #submit {
-  margin-left: 69.7%;
-  margin-top: $padding-large-vertical;
+  //margin-left: 69.7%;
+  //margin-top: $padding-large-vertical;
+  button{
+    float:right;
+  }
 }
 
 a.sweet-alert-button {
@@ -260,4 +280,40 @@ a.sweet-alert-button {
     background-color: rgb(134, 204, 235) !important;
     color: white;
   }
+}
+
+@media (max-width: 500px){
+
+  .sweet-alert{
+    margin-top: 0 !important;
+    top: 20px !important;
+    .times {
+      overflow-y: scroll;
+      max-height: 270px;
+      margin-bottom: 40px;
+      &:after {
+        content: '';
+        position: absolute;
+        left: 42%;
+        top: 110%;
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-top: 20px solid #e8e8e8;
+        clear: both;
+      }
+      &:before {
+        content: 'Scroll for more';
+        position: absolute;
+        top: 102%;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        height: 10px;
+        clear: both;
+      }
+    }
+  }
+
 }
